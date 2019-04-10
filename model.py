@@ -57,15 +57,20 @@ class SummarizationModel(object):
             self._max_art_oovs = tf.placeholder(tf.int32, [], name='max_art_oovs')
 
         # decoder part
+        if hps.mode.value == "decode":
+            max_dec_steps = hps.max_dec_steps
+        else:
+            max_dec_steps = hps.max_dec_steps.value
+
         self._dec_batch = tf.placeholder(
-            tf.int32, [hps.batch_size.value, hps.max_dec_steps], name='dec_batch'
+            tf.int32, [hps.batch_size.value, max_dec_steps], name='dec_batch'
         )
         self._target_batch = tf.placeholder(
-            tf.int32, [hps.batch_size.value, hps.max_dec_steps],
+            tf.int32, [hps.batch_size.value, max_dec_steps],
             name='target_batch'
         )
         self._dec_padding_mask = tf.placeholder(
-            tf.float32, [hps.batch_size.value, hps.max_dec_steps],
+            tf.float32, [hps.batch_size.value, max_dec_steps],
             name='dec_padding_mask'
         )
 
